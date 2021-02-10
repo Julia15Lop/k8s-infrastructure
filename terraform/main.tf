@@ -12,3 +12,12 @@ provider "azurerm" {
     features {}
 }
 
+# Module common
+module "common" {
+    source = "./modules/common"
+}
+
+# Module master
+module "master" {
+    source = "./modules/master"
+}
