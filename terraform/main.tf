@@ -20,4 +20,6 @@ module "common" {
 # Module master
 module "master" {
     source = "./modules/master"
+
+    resource_group_name = module.common.resource_group_name
 }
