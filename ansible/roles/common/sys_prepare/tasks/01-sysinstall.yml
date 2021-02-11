@@ -1,7 +1,7 @@
 ---
 
 - name: Install Chrony
-  dnf:
+  yum:
     name: 'chrony'
     state: latest
   tags:
@@ -10,23 +10,19 @@
 
 - name: Enable Chrony
   systemd:
-    name: chrony
+    name: chronyd
     enabled: yes
     state: started
   tags:
     - chrony-install
     - sys-prepare
 
-- name: Install python3
-  dnf:
-  state: latest
-  update_cache: yes
-
-- name: Update system
-  dnf:
-    name: '*'
+- name: Install Git
+  yum:
+    name: git
     state: latest
 
-- name: System Reboot
-  reboot:
-    reboot_timeout: uptime
+- name: Update system
+  yum:
+    name: '*'
+    state: latest
