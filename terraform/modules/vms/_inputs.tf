@@ -1,11 +1,4 @@
-# Resource Group Name
-variable "resource_group_name" {
-  type = string
-}
-
-variable "k8s_nic_id" {
-  type = string
-}
+# VM size
 
 variable "vm_size" {
   type        = string
@@ -13,12 +6,26 @@ variable "vm_size" {
   default     = "Standard_D1_v2"
 }
 
+# VM Location
+
 variable "location" {
   type        = string
-  description = "Virtual machine size"
+  description = "Virtual machine location"
   default     = "West Europe"
 }
 
-variable "stg_account" {
-  type = string
+variable "node_count" {
+  type    = number
+  default = 4
+}
+
+# Nodes
+
+locals {
+  nodes = {
+    "master"   = "10.0.1.10", 
+    "worker01" = "10.0.1.20", 
+    "worker02" = "10.0.1.30", 
+    "nfs"      = "10.0.1.40"
+  }
 }

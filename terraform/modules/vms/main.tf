@@ -1,12 +1,15 @@
 # Create VM
 
 resource "azurerm_linux_virtual_machine" "k8s_master" {
-    name                  = "k8s-master"
-    resource_group_name   = var.resource_group_name
-    location              = var.location
+    for_each = local.nodes
+
+    name                  = "k8s-${each.key}"
+    resource_group_name   = azurerm_resource_group.k8s.name
+    location              = azurerm_resource_group.k8s.location
     size                  = var.vm_size
     admin_username        = "ansible"
-    network_interface_ids = [ var.k8s_nic_id ]
+    network_interface_ids = [ azurerm_network_interface.k8s_nic[each.key].id ]
+    
     disable_password_authentication = true
 
     admin_ssh_key {
@@ -33,7 +36,7 @@ resource "azurerm_linux_virtual_machine" "k8s_master" {
     }
 
     boot_diagnostics {
-        storage_account_uri = var.stg_account
+        storage_account_uri = azurerm_storage_account.storage_account.primary_blob_endpoint
     }
 
     tags = {

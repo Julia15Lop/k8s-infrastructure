@@ -24,20 +24,22 @@ resource "azurerm_subnet" "k8s_subnet" {
 # NIC
 
 resource "azurerm_network_interface" "k8s_nic" {
-  name                = "k8s-nic"  
+  for_each = local.nodes
+
+  name                = "k8s-${each.key}-nic"  
   location            = azurerm_resource_group.k8s.location
   resource_group_name = azurerm_resource_group.k8s.name
 
     ip_configuration {
-      name                           = "k8s-ip-config"
+      name                           = "k8s-${each.key}-ip-config"
       subnet_id                      = azurerm_subnet.k8s_subnet.id 
       private_ip_address_allocation  = "Static"
-      private_ip_address             = "10.0.1.10"
-      public_ip_address_id           = azurerm_public_ip.k8s_public_ip.id
-  }
+      private_ip_address             = each.value
+      public_ip_address_id           = azurerm_public_ip.k8s_public_ip[each.key].id
+    }
 
     tags = {
-        environment = "k8s-prod"
+      environment = "k8s-prod"
     }
 
 }
@@ -45,7 +47,9 @@ resource "azurerm_network_interface" "k8s_nic" {
 # Public IP
 
 resource "azurerm_public_ip" "k8s_public_ip" {
-  name                = "k8s-public-ip"
+  for_each = local.nodes
+
+  name                = "k8s-${each.key}-ip"
   location            = azurerm_resource_group.k8s.location
   resource_group_name = azurerm_resource_group.k8s.name
   allocation_method   = "Static"
