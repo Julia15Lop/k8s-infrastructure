@@ -1,0 +1,32 @@
+{
+    "builders": [{
+      "type": "azure-arm",
+  
+      "client_id": "4557e655-8b9e-4e1c-b376-5b0486b61ab9",
+      "client_secret": "c113164a-4c04-4367-b793-925680a92b18",
+      "tenant_id": "899789dc-202f-44b4-8472-a6d40f9eb440",
+      "subscription_id": "3e1584ec-3cfd-4271-b796-b35a74744b77",
+  
+      "managed_image_resource_group_name": "azure-k8s",
+      "managed_image_name": "azure-k8s-image",
+  
+      "os_type": "Linux",
+      "image_publisher": "OpenLogic",
+      "image_offer": "CentOS",
+      "image_sku": "7.5",
+  
+      "azure_tags": {
+          "dept": "Custom Image",
+          "task": "Image deployment"
+      },
+  
+      "location": "West Europe",
+      "vm_size": "Standard_DS2_v2"
+    }],
+    "provisioners": [{
+        "type": "shell",
+        "scripts": [
+            "base.sh"
+        ]
+    }]
+}
