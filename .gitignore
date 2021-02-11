@@ -1,3 +1,4 @@
+.ssh_keys/id_rsa.pub
 .terraform
 .ansible-vault-key
 terraform.tfstate.*.backup
