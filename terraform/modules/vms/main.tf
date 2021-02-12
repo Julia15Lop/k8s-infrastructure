@@ -1,9 +1,15 @@
 # Create VM
 
-resource "azurerm_linux_virtual_machine" "k8s_master" {
+data "template_file" "vm_user_data" {
     for_each = local.nodes
 
-    name                  = "k8s-${each.key}"
+    template = file("${path.module}/user_data/${each.key}.sh")
+}
+
+resource "azurerm_linux_virtual_machine" "k8s_vm" {
+    for_each = local.nodes
+
+    name                  = "k8s-${each.key}-azure"
     resource_group_name   = azurerm_resource_group.k8s.name
     location              = azurerm_resource_group.k8s.location
     size                  = var.vm_size
@@ -11,6 +17,8 @@ resource "azurerm_linux_virtual_machine" "k8s_master" {
     network_interface_ids = [ azurerm_network_interface.k8s_nic[each.key].id ]
     
     disable_password_authentication = true
+
+    custom_data = base64encode(data.template_file.vm_user_data[each.key].rendered)
 
     admin_ssh_key {
         username   = "ansible"
