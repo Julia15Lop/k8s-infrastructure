@@ -1,0 +1,121 @@
+---
+
+- name: Copy DNS config
+  template:
+    src: "hosts.cfg.j2"
+    dest: "/etc/hosts"
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - sys-prepare
+
+# Activating transparent masquerading
+- name: Modprobe
+  command: modprobe br_netfilter
+  tags:
+    - sys-prepare
+
+- name: Firewall masquerade
+  firewalld:
+    masquerade: 'yes'
+    state: enabled
+    permanent: true
+  tags:
+    - sys-prepare
+
+- name: Firewalld reload service
+  systemd:
+    name: firewalld
+    state: reloaded
+  tags:
+    - sys-prepare
+
+# Control traffic
+- name: Manage traffic
+  template:
+    src: 'k8s.conf.j2'
+    dest: '/etc/sysctl.d/k8s.conf'
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - sys-prepare
+
+- name: Reload sysctl
+  command: sysctl --system
+  tags:
+    - sys-prepare
+
+# Deactivate swap
+- name: Deactivate swap
+  command: swapoff  -a
+  tags: 
+    - sys-prepare
+
+# Docker engine
+- name: Download docker from repo
+  get_url:
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: /etc/yum.repos.d/docker-cd.repo
+  tags:
+    - sys-prepare
+
+- name: Install docker
+  package:
+    name: ['docker-ce-19.03.14-3.el8', 'containerd.io']
+    state: latest
+  tags:
+    - sys-prepare
+
+- name: Enable docker
+  systemd:
+    name: 'docker'
+    state: started
+    enabled: yes
+  tags:
+    - sys-prepare
+
+- name: Docker permissions
+  file:
+    path: /var/run/docker.sock
+    mode: '666'
+  tags:
+    - sys-prepare
+
+- name: Restart docker
+  systemd:
+    name: 'docker'
+    state: restarted
+    enabled: yes
+  tags:
+    - sys-prepare
+
+# Install k8s
+- name: Configure k8 repo
+  template:
+    src: kubernetes.repo.j2
+    dest: /etc/yum.repos.d/kubernetes.repo
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - sys-prepare
+
+- name: Install kubernetes
+  dnf:
+    name: ['kubelet', 'kubeadm', 'kubectl']
+    state: present
+    disable_excludes: all
+    exclude: kubernetes
+  tags:
+    - sys-prepare
+
+- name: Enable kubelet
+  systemd:
+    name: 'kubelet'
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+  tags:
+    - sys-prepare

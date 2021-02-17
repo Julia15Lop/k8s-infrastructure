@@ -1,0 +1,38 @@
+---
+
+- name: enable epel repository
+  command: "/usr/bin/dnf -y install 'https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm'"
+  become: yes
+
+- name: enable powertools repository
+  command: "/usr/bin/dnf config-manager --set-enabled powertools"
+
+- name: Update system
+  dnf:
+    name: "*"
+    state: latest
+
+- name: Install packages
+  dnf:
+    name: ['chrony', 'nfs-utils', 'nfs4-acl-tools', 'net-tools', 'wget', 'firewalld']
+    state: latest
+  tags:
+    - sys-prepare
+
+- name: Enable Chrony
+  systemd:
+    name: 'chronyd'
+    state: started
+    enabled: yes
+    masked: no
+  tags:
+    - sys-prepare
+
+- name: Enable Firewalld
+  systemd:
+    name: 'firewalld'
+    state: started
+    enabled: yes
+    masked: no
+  tags:
+    - sys-prepare
