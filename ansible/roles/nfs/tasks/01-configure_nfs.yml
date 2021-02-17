@@ -1,0 +1,47 @@
+---
+
+- name: Enable NFS
+  service:
+    name: 'nfs-server'
+    enabled: yes
+  tags:
+    - nfs
+
+- name: Start NFS
+  service:
+    name: 'nfs-server'
+    state: started
+  tags:
+    - nfs
+
+# Firewalld enable and reload
+- name: Firewall nfs
+  firewalld:
+    service: 'nfs'
+    state: enabled
+    permanent: true
+  tags:
+    - nfs
+
+- name: Firewall rpc
+  firewalld:
+    service: 'rpc-bind'
+    state: enabled
+    permanent: true
+  tags:
+    - nfs
+
+- name: Firewall mountd
+  firewalld:
+    service: 'mountd'
+    state: enabled
+    permanent: true
+  tags:
+    - nfs
+
+- name: Firewalld reload service
+  systemd:
+    name: firewalld
+    state: reloaded
+  tags:
+    - nfs
