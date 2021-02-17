@@ -3,4 +3,4 @@
   gather_facts: yes
   become: yes
   roles:
-    - { role: common/, tags: }
+    - { role: nfs, tags: nfs}

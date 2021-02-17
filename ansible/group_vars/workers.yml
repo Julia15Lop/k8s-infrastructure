@@ -1,0 +1,7 @@
+---
+
+# Webapp vars
+DocumentRoot: '/var/www/html/webapp'
+ServerName: "www.acme.es"
+
+webapp_dir: '/var/www/html/webapp'

@@ -1,0 +1,8 @@
+---
+
+# RedHat haproxy vars
+haproxy_rpms: ['haproxy']
+
+# Host IP
+apache1_ip: '192.168.1.141'
+apache2_ip: '192.168.1.142'
