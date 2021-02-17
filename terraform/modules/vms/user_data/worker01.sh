@@ -5,10 +5,10 @@ set -xe
 sudo yum update -y
 
 # Set hostname
-HOST_PREFIX=nfs
+HOST_PREFIX=worker01
 sudo hostnamectl set-hostname $HOST_PREFIX.azure
 
-hostname | tee /etc/hostname
+sudo hostname | tee /etc/hostname
 
 # Set timezone
 sudo timedatectl set-timezone Europe/Madrid

@@ -3,7 +3,7 @@
 data "template_file" "vm_user_data" {
     for_each = local.nodes
 
-    template = file("${path.module}/user_data/${each.key}.cfg")
+    template = file("${path.module}/user_data/${each.key}.sh")
 }
 
 resource "azurerm_linux_virtual_machine" "k8s_vm" {

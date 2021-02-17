@@ -23,7 +23,7 @@ variable "node_count" {
 
 locals {
   nodes = {
-    "master"   = "10.0.1.10", 
+    "master-nfs"   = "10.0.1.10", 
     "worker01" = "10.0.1.20", 
     #"worker02" = "10.0.1.30", 
     #"nfs"      = "10.0.1.40"
