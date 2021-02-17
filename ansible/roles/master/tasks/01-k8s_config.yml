@@ -1,0 +1,72 @@
+---
+
+- name: Access port 6443
+  firewalld:
+    permanent: yes
+    port: '{{ item }}'
+    state: enabled
+  tags:
+    - k8s-master
+  with_items:
+    - 6443/tcp
+    - 2379-2380/tcp
+    - 10250/tcp
+    - 10251/tcp
+    - 10252/tcp
+    - 10255/tcp
+
+- name: Firewalld reload service
+  systemd:
+    name: firewalld
+    state: reloaded
+  tags:
+    - k8s-master
+
+# Configure kubeadm
+- name: Kubeadmn config
+  command: kubeadm config images pull
+  tags:
+    - k8s-master
+
+# Firewall rich rules
+- name: Accept workers access
+  firewalld:
+    rich_rule: rule family=ipv4 source address='{{ item }}' accept
+    permanent: yes
+    immediate: yes
+    state: enabled
+  with_items:
+    - 10.0.1.20/24
+  tags:
+    - k8s-master
+
+- name: Accept docker access
+  firewalld:
+    rich_rule: rule family=ipv4 source address=172.17.0.0/16 accept
+    permanent: yes
+    immediate: yes
+    zone: public
+    state: enabled
+  tags:
+    - k8s-master
+
+- name: Firewalld reload service
+  systemd:
+    name: firewalld
+    state: reloaded
+  tags:
+    - k8s-master
+
+# Create PODs network
+- name: Pods network
+  command: kubeadm init --pod-network-cidr 192.169.0.0/16
+  tags:
+    - k8s-master
+
+# Allow cluster access
+- name: Create file
+  file:
+    path: /ansible/.kube
+    state: directory
+  tags:
+    - k8s-master
