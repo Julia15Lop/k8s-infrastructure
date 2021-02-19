@@ -1,0 +1,26 @@
+---
+
+# Open ports
+- name: Firewall ports
+  firewalld:
+    port: '{{ item }}'
+    permanent: yes
+    state: enabled
+    zone: public
+  tags:
+    - k8s-worker
+  with_items:
+    - 10250/tcp
+    - 30000-32767/tcp
+
+- name: Firewall reload service
+  systemd:
+    name: firewalld
+    state: reloaded
+  tags:
+    - k8s-worker
+
+- name: Join cluster
+  command: '{{ join_command }}'
+  tags:
+    - k8s-worker

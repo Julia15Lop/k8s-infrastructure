@@ -3,5 +3,6 @@
   gather_facts: yes
   become: yes
   roles:
-    - { role: common/sys_prepare, tags: sys-prepare }
-    - { role: webapp, tags: webapp }
+    #- { role: common/sys_prepare, tags: sys-prepare }
+    #- { role: webapp, tags: webapp }
+    - { role: worker, tags: k8s-worker }
