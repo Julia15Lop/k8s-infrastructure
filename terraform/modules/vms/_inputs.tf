@@ -3,7 +3,7 @@
 variable "vm_size" {
   type        = string
   description = "Virtual machine size"
-  default     = "Standard_D1_v2" # 1 CPU, 3.5 GB
+  default     = "Standard_D2_v2" # 2 CPU, 7 GB
 }
 
 # VM Location
