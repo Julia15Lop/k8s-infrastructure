@@ -1,0 +1,24 @@
+---
+
+# Calico
+- name: Install Tigera
+  command: kubectl create -f "https://docs.projectcalico.org/manifests/tigera-operator.yaml"
+  become: no
+  tags:
+    - calico
+
+- name: Get Calico resource
+  get_url:
+    url: "https://docs.projectcalico.org/manifests/custom-resources.yaml"
+    dest: "/home/ansible/.kube/"
+    owner: ansible
+    group: ansible
+    mode: 0644
+  tags:
+    - calico  
+
+- name: Install Calico
+  command: "kubectl apply -f /home/ansible/.kube/custom-resources.yaml"
+  become: no
+  tags:
+    - calico

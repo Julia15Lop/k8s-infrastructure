@@ -4,5 +4,5 @@
   become: yes
   roles:
     #- { role: haproxy, tags: haproxy}
-    - { role: master, tags: k8s-master}
+    - { role: master, tags: k8s-master, calico}
     

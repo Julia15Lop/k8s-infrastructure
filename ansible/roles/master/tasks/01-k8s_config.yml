@@ -36,7 +36,7 @@
     immediate: yes
     state: enabled
   with_items:
-    - 10.0.1.20/24
+    - 10.0.1.20/32
   tags:
     - k8s-master
 
@@ -59,14 +59,25 @@
 
 # Create PODs network
 - name: Pods network
-  command: kubeadm init --pod-network-cidr 192.169.0.0/16
+  command: kubeadm init --pod-network-cidr 192.168.0.0/16
   tags:
     - k8s-master
 
 # Allow cluster access
 - name: Create file
   file:
-    path: /ansible/.kube
+    path: /home/ansible/.kube
     state: directory
+  tags:
+    - k8s-master
+
+- name: Enable access
+  copy:
+    src: "/etc/kubernetes/admin.conf"
+    dest: "/home/ansible/.kube/config"
+    owner: ansible
+    group: ansible
+    mode: 0600
+    remote_src: yes
   tags:
     - k8s-master
