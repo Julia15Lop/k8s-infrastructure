@@ -68,7 +68,7 @@
   tags:
     - sys-prepare
 
-- name: Enable docker
+- name: Check docker status
   systemd:
     name: 'docker'
     state: started
@@ -79,7 +79,9 @@
 - name: Docker permissions
   file:
     path: /var/run/docker.sock
-    mode: '666'
+    owner: root
+    group: docker
+    mode: 0666
   tags:
     - sys-prepare
 
