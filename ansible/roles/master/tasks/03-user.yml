@@ -1,0 +1,28 @@
+---
+
+- name: Create User no admin
+  user:
+    name: kubeadmin
+    comment: User no admin
+    create_home: yes
+    home: /home/kubeadmin
+  tags:
+    - user
+
+- name: Create kubeconfig directory
+  file:
+    path: /home/kubeadmin/.kube
+    state: directory
+  tags:
+    - user
+
+- name: Enable access
+  copy:
+    src: "/etc/kubernetes/admin.conf"
+    dest: "/home/kubeadmin/.kube/config"
+    owner: kubeadmin
+    group: kubeadmin
+    mode: 0600
+    remote_src: yes
+  tags:
+    - user

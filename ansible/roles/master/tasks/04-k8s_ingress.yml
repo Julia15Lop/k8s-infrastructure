@@ -1,0 +1,6 @@
+---
+
+- name: Install Ingress Controller
+  command: kubectl apply -f https://raw.githubusercontent.com/haproxytech/kubernetes-ingress/v1.5/deploy/haproxy-ingress.yaml
+  tags:
+    - k8s-ingress

@@ -1,20 +1,15 @@
 ---
 
-- name: Enable NFS
-  service:
-    name: 'nfs-server'
-    enabled: yes
-  tags:
-    - nfs
-
+# Enable NFS
 - name: Start NFS
   service:
     name: 'nfs-server'
     state: started
+    enabled: yes
   tags:
     - nfs
 
-# Firewalld enable and reload
+# Firewalld config
 - name: Firewall nfs
   firewalld:
     service: 'nfs'

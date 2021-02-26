@@ -1,0 +1,56 @@
+---
+
+
+
+
+
+# - name: Firewalld reload service
+#   systemd:
+#     name: firewalld
+#     state: reloaded
+#   tags:
+#     - sys-prepare
+
+
+
+
+
+
+
+
+
+# - name: Restart docker
+#   systemd:
+#     name: 'docker'
+#     state: restarted
+#   tags:
+#     - sys-prepare
+
+# Install k8s
+- name: Configure k8 repo
+  template:
+    src: kubernetes.repo.j2
+    dest: /etc/yum.repos.d/kubernetes.repo
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - sys-prepare
+
+- name: Install kubernetes
+  dnf:
+    name: ['kubelet', 'kubeadm', 'kubectl']
+    state: present
+    disable_excludes: all
+    exclude: kubernetes
+  tags:
+    - sys-prepare
+
+- name: Enable kubelet
+  systemd:
+    name: 'kubelet'
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+  tags:
+    - sys-prepare

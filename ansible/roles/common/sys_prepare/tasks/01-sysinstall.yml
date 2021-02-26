@@ -9,13 +9,13 @@
     - sys-prepare
 
 - name: enable epel repository
-  command: "dnf -y install 'https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm'"
+  command: "yum -y install 'https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm'"
   become: yes
   tags:
     - sys-prepare
 
 - name: enable powertools repository
-  command: "dnf config-manager --set-enabled powertools"
+  command: "yum config-manager --set-enabled powertools"
   tags:
     - sys-prepare
 
@@ -26,6 +26,7 @@
   tags:
     - sys-prepare
 
+# Enable services
 - name: Enable Chrony
   systemd:
     name: 'chronyd'

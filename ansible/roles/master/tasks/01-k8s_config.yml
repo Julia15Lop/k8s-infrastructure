@@ -1,12 +1,11 @@
 ---
 
+# Firewall access
 - name: Access port 6443
   firewalld:
     permanent: yes
     port: '{{ item }}'
     state: enabled
-  tags:
-    - k8s-master
   with_items:
     - 6443/tcp
     - 2379-2380/tcp
@@ -14,13 +13,17 @@
     - 10251/tcp
     - 10252/tcp
     - 10255/tcp
-
-- name: Firewalld reload service
-  systemd:
-    name: firewalld
-    state: reloaded
+  notify:
+    - Reload Firewall
   tags:
     - k8s-master
+
+# - name: Firewalld reload service
+#   systemd:
+#     name: firewalld
+#     state: reloaded
+#   tags:
+#     - k8s-master
 
 # Configure kubeadm
 - name: Kubeadmn config
@@ -47,15 +50,17 @@
     immediate: yes
     zone: public
     state: enabled
+  notify:
+    - Reload Firewall
   tags:
     - k8s-master
 
-- name: Firewalld reload service
-  systemd:
-    name: firewalld
-    state: reloaded
-  tags:
-    - k8s-master
+# - name: Firewalld reload service
+#   systemd:
+#     name: firewalld
+#     state: reloaded
+#   tags:
+#     - k8s-master
 
 # Create PODs network
 - name: Pods network
@@ -79,5 +84,21 @@
     group: ansible
     mode: 0600
     remote_src: yes
+  tags:
+    - k8s-master
+
+# Create kubeadm token for workers
+- name: Create token
+  command: kubeadm token create --print-join-command
+  register: output
+  tags:
+    - k8s-master
+
+- name: add to workers vars
+  lineinfile:
+    path: "group_vars/workers.yml"
+    line: 'join_command: {{ output.stdout }}'
+  become: no
+  delegate_to: localhost
   tags:
     - k8s-master

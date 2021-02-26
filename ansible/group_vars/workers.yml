@@ -7,3 +7,4 @@ ServerName: "www.acme.es"
 webapp_dir: '/var/www/html/webapp'
 
 # Join kubeadm command
+join_command: kubeadm join 10.0.1.10:6443 --token 5y4v2e.gn1jpfid71p1ub1j     --discovery-token-ca-cert-hash sha256:93aea29e0e88cb77224514842c24b2d56962b92bd58ed6d504658f5bd3035c7a 

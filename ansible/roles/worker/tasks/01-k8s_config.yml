@@ -20,6 +20,7 @@
   tags:
     - k8s-worker
 
+# Join k8s Cluster
 - name: Join cluster
   command: '{{ join_command }}'
   tags:

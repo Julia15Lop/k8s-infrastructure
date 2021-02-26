@@ -1,5 +1,6 @@
 ---
 
+# DNS config
 - name: Copy DNS config
   template:
     src: "hosts.cfg.j2"
@@ -21,13 +22,8 @@
     masquerade: 'yes'
     state: enabled
     permanent: true
-  tags:
-    - sys-prepare
-
-- name: Firewalld reload service
-  systemd:
-    name: firewalld
-    state: reloaded
+  notify:
+    - Restart firewalld
   tags:
     - sys-prepare
 
@@ -70,9 +66,15 @@
 
 - name: Check docker status
   systemd:
-    name: 'docker'
+    name: docker
     state: started
     enabled: yes
+  tags:
+    - sys-prepare
+
+- name: Wait for docker start
+  pause:
+    seconds: 10
   tags:
     - sys-prepare
 
@@ -82,42 +84,7 @@
     owner: root
     group: docker
     mode: 0666
-  tags:
-    - sys-prepare
-
-- name: Restart docker
-  systemd:
-    name: 'docker'
-    state: restarted
-    enabled: yes
-  tags:
-    - sys-prepare
-
-# Install k8s
-- name: Configure k8 repo
-  template:
-    src: kubernetes.repo.j2
-    dest: /etc/yum.repos.d/kubernetes.repo
-    owner: root
-    group: root
-    mode: 0644
-  tags:
-    - sys-prepare
-
-- name: Install kubernetes
-  dnf:
-    name: ['kubelet', 'kubeadm', 'kubectl']
-    state: present
-    disable_excludes: all
-    exclude: kubernetes
-  tags:
-    - sys-prepare
-
-- name: Enable kubelet
-  systemd:
-    name: 'kubelet'
-    state: restarted
-    daemon_reload: yes
-    enabled: yes
+  notify:
+    - Restart Docker
   tags:
     - sys-prepare

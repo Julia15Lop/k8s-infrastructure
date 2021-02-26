@@ -1,0 +1,13 @@
+---
+
+- name: Restart firewalld
+  service:
+    name: firewalld
+    state: restarted
+  listen: Restart firewalld
+
+- name: Restart Docker
+  service:
+    name: docker
+    state: restarted
+  listen: Restart Docker

@@ -2,20 +2,5 @@
 
 #- include_tasks: 01-k8s_config.yml
 #- include_tasks: 02-sdn_install.yml
-
-- name: Create token
-  command: kubeadm token create --print-join-command
-  register: output
-
-- name: add to workers vars
-  lineinfile:
-    path: "group_vars/workers.yml"
-    line: 'join_command: {{ output.stdout }}'
-  become: no
-  delegate_to: localhost
-# - name: copy to local file
-#   copy:
-#     content: "{{ output.stdout }}"
-#     dest: "/roles/worker/templates"
-#   become: no
-#   delegate_to: localhost  
+- include_tasks: 03-user.yml
+- include_tasks: 04-k8s_ingress.yml
