@@ -9,6 +9,35 @@
   tags:
     - nfs
 
+# Configure NFS access
+- name: NFS access
+  template:
+    src: "exports.conf"
+    dest: "/etc/exports"
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - nfs
+
+- name: Create shared dir
+  file:
+    path: /srv/nfs
+    state: directory
+    mode: '0755'
+  tags: 
+    - nfs
+
+- name: Apply config
+  command: exportfs -r
+  tags:
+    - nfs
+
+- name: Apply exports config
+  command: exportfs -s
+  tags:
+    - nfs
+
 # Firewalld config
 - name: Firewall nfs
   firewalld:
