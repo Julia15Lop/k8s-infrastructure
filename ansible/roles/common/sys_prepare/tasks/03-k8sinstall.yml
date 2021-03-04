@@ -1,30 +1,14 @@
 ---
 
-
-
-
-
-# - name: Firewalld reload service
-#   systemd:
-#     name: firewalld
-#     state: reloaded
-#   tags:
-#     - sys-prepare
-
-
-
-
-
-
-
-
-
-# - name: Restart docker
-#   systemd:
-#     name: 'docker'
-#     state: restarted
-#   tags:
-#     - sys-prepare
+# Docker permissions
+- name: Docker permissions
+  file:
+    path: /var/run/docker.sock
+    owner: root
+    group: docker
+    mode: 0666
+  tags:
+    - sys-prepare
 
 # Install k8s
 - name: Configure k8 repo

@@ -3,5 +3,5 @@
 - name: Reload Firewall
   service:
     name: firewalld
-    status: reloaded
+    state: reloaded
   listen: Reload Firewall

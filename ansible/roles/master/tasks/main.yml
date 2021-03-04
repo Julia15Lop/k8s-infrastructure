@@ -1,6 +1,6 @@
 ---
 
-#- include_tasks: 01-k8s_config.yml
-#- include_tasks: 02-sdn_install.yml
+- include_tasks: 01-k8s_config.yml
+- include_tasks: 02-sdn_install.yml
 - include_tasks: 03-user.yml
 - include_tasks: 04-k8s_ingress.yml

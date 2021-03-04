@@ -27,6 +27,8 @@ resource "azurerm_network_security_rule" "commo-rules" {
     destination_address_prefix = "*"
     resource_group_name         = azurerm_resource_group.k8s.name
     network_security_group_name = azurerm_network_security_group.k8s_sec_group[each.key].name
+    
+    depends_on = [ azurerm_network_security_group.k8s_sec_group ]
 }
 
 # Add Master Security rules
@@ -44,6 +46,8 @@ resource "azurerm_network_security_rule" "tcp-master" {
     destination_address_prefix = "*"
     resource_group_name         = azurerm_resource_group.k8s.name
     network_security_group_name = "k8s-master-nfs-sec-group"
+
+    depends_on = [ azurerm_network_security_group.k8s_sec_group ]
 }
 
 # Add Worker security rules
@@ -61,6 +65,7 @@ resource "azurerm_network_security_rule" "tcp-workers" {
     destination_address_prefix = "*"
     resource_group_name         = azurerm_resource_group.k8s.name
     network_security_group_name = "k8s-worker01-sec-group"
+    depends_on = [ azurerm_network_security_group.k8s_sec_group ]
 }
 
 # Security Group network interface

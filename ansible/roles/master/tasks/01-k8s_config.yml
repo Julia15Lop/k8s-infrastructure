@@ -18,13 +18,6 @@
   tags:
     - k8s-master
 
-# - name: Firewalld reload service
-#   systemd:
-#     name: firewalld
-#     state: reloaded
-#   tags:
-#     - k8s-master
-
 # Configure kubeadm
 - name: Kubeadmn config
   command: kubeadm config images pull
@@ -39,7 +32,7 @@
     immediate: yes
     state: enabled
   with_items:
-    - 10.0.1.20/32
+    - 192.168.1.111/32
   tags:
     - k8s-master
 
@@ -54,13 +47,6 @@
     - Reload Firewall
   tags:
     - k8s-master
-
-# - name: Firewalld reload service
-#   systemd:
-#     name: firewalld
-#     state: reloaded
-#   tags:
-#     - k8s-master
 
 # Create PODs network
 - name: Pods network
@@ -98,6 +84,7 @@
   lineinfile:
     path: "group_vars/workers.yml"
     line: 'join_command: {{ output.stdout }}'
+    state: present
   become: no
   delegate_to: localhost
   tags:

@@ -3,7 +3,7 @@
 variable "vm_size" {
   type        = string
   description = "Virtual machine size"
-  default     = "Standard_D2_v2" # 2 CPU, 7 GB
+  default     = " " # 2 CPU, 7 GB
 }
 
 # VM Location
@@ -32,7 +32,7 @@ locals {
   master_ports = [
     "6443","2379-2380", "10250-10252", "10255"
   ]
-  
+
   worker_ports = [
     "10250","30000-32767" 
   ]

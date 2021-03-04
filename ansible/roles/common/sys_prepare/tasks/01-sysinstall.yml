@@ -21,7 +21,7 @@
 
 - name: Install packages
   dnf:
-    name: ['chrony', 'nfs-utils', 'nfs4-acl-tools', 'net-tools', 'wget', 'firewalld']
+    name: ['chrony', 'nfs-utils', 'nfs4-acl-tools', 'net-tools', 'wget', 'firewalld', 'git']
     state: latest
   tags:
     - sys-prepare
