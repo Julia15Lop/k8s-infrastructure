@@ -1,7 +1,7 @@
 ---
 
 - name: Create namespace
-  command: kubectl create namespace webapp-volumes
+  command: kubectl create namespace webapp-routed
   become: no
   tags:
     - webapp
@@ -10,6 +10,57 @@
   file:
     path: /home/ansible/webapp
     state: directory
+  tags:
+    - webapp
+
+# Create deployment
+- name: Deployment file
+  template:
+    src: 'app.yml.j2'
+    dest: '/home/ansible/webapp/app.yml'
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - webapp
+
+- name: Apply deployment
+  command: kubectl apply -f ~/webapp/app.yml
+  become: no
+  tags:
+    - webapp
+
+# Create Ingress controller
+- name: Ingress file
+  template:
+    src: 'ingress.yml.j2'
+    dest: '/home/ansible/webapp/ingress.yml'
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - webapp
+
+- name: Apply ingress file
+  command: kubectl apply -f ~/webapp/ingress.yml
+  become: no
+  tags:
+    - webapp
+
+# Create configMap
+- name: ConfigMap file
+  template:
+    src: 'configmap.yml.j2'
+    dest: '/home/ansible/webapp/configmap.yml'
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - webapp
+
+- name: Apply configmap file
+  command: kubectl apply -f ~/webapp/configmap.yml
+  become: no
   tags:
     - webapp
 
@@ -43,23 +94,6 @@
 
 - name: Apply pods
   command: kubectl apply -f ~/webapp/nfs-pvc.yml
-  become: no
-  tags:
-    - webapp
-
-# Create deployment
-- name: Create Deployment
-  template:
-    src: 'deployment.yml.j2'
-    dest: '/home/ansible/webapp/webapp-volumes.yml'
-    owner: root
-    group: root
-    mode: 0644
-  tags:
-    - webapp
-
-- name: Apply deployment
-  command: kubectl apply -f ~/webapp/webapp-volumes.yml
   become: no
   tags:
     - webapp

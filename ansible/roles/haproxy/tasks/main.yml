@@ -1,5 +1,0 @@
----
-
-- include_tasks: 01-install_redhat.yml
-- include_tasks: 02-services.yml
-- include_tasks: 03-firewall.yml

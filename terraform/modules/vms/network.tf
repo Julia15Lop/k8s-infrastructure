@@ -2,7 +2,7 @@
 
 resource "azurerm_virtual_network" "k8s_net" {
     name                = "k8s-net"
-    address_space       = ["10.0.0.0/16"]
+    address_space       = ["172.16.0.0/16"]
     location            = azurerm_resource_group.k8s.location
     resource_group_name = azurerm_resource_group.k8s.name
 
@@ -17,7 +17,7 @@ resource "azurerm_subnet" "k8s_subnet" {
     name                   = "k8s-subnet"
     resource_group_name    = azurerm_resource_group.k8s.name
     virtual_network_name   = azurerm_virtual_network.k8s_net.name
-    address_prefixes       = ["10.0.1.0/24"]
+    address_prefixes       = ["172.16.1.0/24"]
 
 }
 

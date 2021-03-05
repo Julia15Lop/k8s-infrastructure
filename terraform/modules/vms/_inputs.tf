@@ -3,7 +3,7 @@
 variable "vm_size" {
   type        = string
   description = "Virtual machine size"
-  default     = " " # 2 CPU, 7 GB
+  default     = "Standard_D2_v2" # 2 CPU, 7 GB
 }
 
 # VM Location
@@ -23,10 +23,10 @@ variable "node_count" {
 
 locals {
   nodes = {
-    "master-nfs" = "10.0.1.10", 
-    "worker01"   = "10.0.1.20", 
-    #"worker02" = "10.0.1.30", 
-    #"nfs"      = "10.0.1.40"
+    "master-nfs" = "172.16.1.10", 
+    "worker01"   = "172.16.1.11", 
+    #"worker02" = "172.16.1.12", 
+    #"nfs"      = "172.16.1.15"
   }
 
   master_ports = [

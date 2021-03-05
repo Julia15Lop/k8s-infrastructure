@@ -3,7 +3,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: nfs-pv
-  namespace: webapp-volumes
+  namespace: webapp-routed
 spec:
   capacity:
     storage: 10Gi
@@ -17,4 +17,4 @@ spec:
     - nfsvers=4.1
   nfs:
     path: /srv/nfs
-    server: 10.0.1.10
+    server: 172.16.1.10
