@@ -1,5 +1,5 @@
 .ssh_keys/id_rsa.pub
 .terraform
 .ansible-vault-key
-terraform.tfstate.*.backup
-terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/terraform.tfstate
