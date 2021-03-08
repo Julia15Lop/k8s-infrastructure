@@ -3,3 +3,4 @@
 .ansible-vault-key
 terraform/terraform.tfstate.backup
 terraform/terraform.tfstate
+terraform/.terraform.lock.hcl
