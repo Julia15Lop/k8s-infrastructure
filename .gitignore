@@ -2,3 +2,4 @@
 .terraform
 .ansible-vault-key
 terraform.tfstate.*.backup
+terraform.tfstate
